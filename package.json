@@ -1,0 +1,20 @@
+{
+  "name": "my-job-hunter",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "mytest": "npx bddgen && npx playwright test --grep @mytest"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@playwright/test": "^1.49.1",
+    "@types/node": "^22.10.7",
+    "playwright-bdd": "^8.1.0"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.7"
+  }
+}
