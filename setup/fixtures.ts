@@ -8,7 +8,7 @@ type Fixtures = {
     homePage: HomePage;
     loginPage: LoginPage;
     jobsPage: JobsPage;
-}
+};
 
 export const test = base.extend<Fixtures>({
     page: async ({ browser }, use) => {
@@ -19,22 +19,21 @@ export const test = base.extend<Fixtures>({
 
         const page = await context.newPage();
 
-        // Apply stealth techniques
+        // Apply stealth techniques safely
         await page.addInitScript(() => {
-            // Remove Playwright's automation flags
             Object.defineProperty(navigator, 'webdriver', { get: () => false });
 
-            // Prevent WebRTC leaks
-            Object.defineProperty(navigator, 'mediaDevices', {
-                get: () => ({ enumerateDevices: async () => [] }),
-            });
+            if ('mediaDevices' in navigator) {
+                Object.defineProperty(navigator.mediaDevices, 'enumerateDevices', {
+                    get: () => async () => [],
+                });
+            }
 
-            // Spoof `chrome` object
-            // @ts-ignore
-            window.chrome = { runtime: {} };
+            (window as any).chrome = { runtime: {} };
         });
 
         await use(page);
+        await context.close();
     },
     homePage: async ({ page }, use) => {
         await use(new HomePage(page));

@@ -1,7 +1,7 @@
 import { When } from "../../setup/fixtures"
 
-When('JobsPage: Search for {string}', async ({ jobsPage }, role: string) => {
-    await jobsPage.fillRoleSearchbox(role);
+When('JobsPage: Search for {string}', async ({ jobsPage }, role) => {
+    await jobsPage.fillRoleSearchbox(role as string);
 });
 
 When('JobsPage: Click on the "Easy Apply" and "Remote" filters', async ({ jobsPage }) => {

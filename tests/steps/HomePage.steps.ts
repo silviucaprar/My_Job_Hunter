@@ -14,8 +14,8 @@ When('HomePage: Click on "Sign in" button to enter Loginpage', async ({ homePage
 });
 
 Then('HomePage: Verify user is logged in', async ({ homePage }) => {
-    const currentURL = await homePage.userIsLoggedIn();
-    expect(currentURL, 'User is not logged in').toContain('linkedin.com/feed')
+    const currentURL: string = await homePage.userIsLoggedIn();
+    expect(currentURL).toContain('linkedin.com/feed')
 });
 
 When('HomePage: Click on "Jobs" tab', async ({ homePage }) => {

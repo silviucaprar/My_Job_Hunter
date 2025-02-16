@@ -16,24 +16,24 @@ export class HomePage {
         this.userName = page.locator('.t-16.t-black.t-bold').nth(0);
     }
 
-    async openHomepage() {
+    async openHomepage(): Promise<void> {
         await this.page.goto('/');
     }
-
-    async clickOnRejectCookiesButton() {
+    
+    async clickOnRejectCookiesButton(): Promise<void> {
         await this.btnRejectCookies.click();
     }
-
-    async clickOnSigninButton() {
+    
+    async clickOnSigninButton(): Promise<void> {
         await this.btnSignin.click();
     }
-
-    async userIsLoggedIn() {
+    
+    async userIsLoggedIn(): Promise<string> {
         await this.page.waitForURL(/linkedin\.com\/feed/);
         return this.page.url();
     }
-
-    async clickOnJobsTab() {
+    
+    async clickOnJobsTab(): Promise<void> {
         await this.lnkjobsTab.click();
     }
 }
