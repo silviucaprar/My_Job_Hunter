@@ -1,16 +1,27 @@
 
-Hi, 
+**My Bot Hunter v1.0** 🚀
 
-I'm Silviu and I like to work in automation testing.
+**About the Project**
+My Bot Hunter is an automation tool built with Playwright, Cucumber, and TypeScript, designed to streamline job searching on LinkedIn. Currently, it focuses on finding "QA Automation Engineer" roles and supports the "Easy Apply" feature.
 
-Here is my first project done with Playwright, Cucumber and Typescript.
+At this stage, the bot can apply to jobs that have a "Submit Application" button, making the process more efficient for job seekers.
 
-This is My Job Hunter v1.0 which is searching for "qa automation engineer" role on LinkedIn.
+**Features**
+✅ Searches for QA Automation Engineer roles on LinkedIn
+✅ Filters results using Easy Apply
+✅ Applies only to jobs with the "Submit Application" button
+🚀 More coming soon!
 
-For now I'm using the "Easy Apply" filter and it's working only for the applications that have the "Submit Application" button.
+**Getting Started**
+To run My Bot Hunter, you need:
+ - Node.js installed
+ - Visual Studio Code installed
+ - Playwright and Cucumber set up in VS Code
 
-More features to come.
+**Clone the repository and install dependencies:**
+ - git clone https://github.com/silviucaprar/My_Bot_Hunter.git  
+ - cd My_Bot_Hunter  
+ - npm install  
 
-Stay tuned.
-
-Thank you very much.
+**Run the tests:**
+ - npm run mytest
