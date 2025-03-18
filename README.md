@@ -15,7 +15,7 @@ At this stage, the bot can apply to jobs that have a "Submit Application" button
 
 ✅ Applies only to jobs with the "Submit Application" button
 
-✅ Sends an emails with Applied Jobs Details (Title + Link of the applied job)
+✅ Sends an email with Applied Jobs Details (Title + Link of the applied job)
 
 ✅ Has an automatically daily job search in Github Actions
 
@@ -36,7 +36,8 @@ To run My Bot Hunter locally, you need:
  - npm install
 
 **Before running the test**
- - Create and .env file and store your EMAIL_USER = '', EMAIL_PASS = '' (create an app password from Google security settings to use instead of your personal email password), LINKEDIN_PASS = ''
+ - Create an .env file and store your EMAIL_USER = '', 
+EMAIL_PASS = '' (create an app password from Google security settings to use instead of your personal email password otherwise sending email with applied jobs won't work), LINKEDIN_PASS = ''
 
 **Run the test:**
  - npm run mytest
