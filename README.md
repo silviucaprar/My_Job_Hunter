@@ -1,5 +1,5 @@
 
-**My Bot Hunter v1.0** 🚀
+**My Bot Hunter v2.0** 🚀
 
 **About the Project**
 
@@ -15,7 +15,11 @@ At this stage, the bot can apply to jobs that have a "Submit Application" button
 
 ✅ Applies only to jobs with the "Submit Application" button
 
-🚀 More coming soon!
+✅ Sends an emails with Applied Jobs Details (Title + Link of the applied job)
+
+✅ Has an automatically daily job search in Github Actions
+
+🚀 More coming !
 
 
 **Getting Started**
@@ -29,7 +33,10 @@ To run My Bot Hunter locally, you need:
 **Clone the repository and install dependencies:**
  - git clone https://github.com/silviucaprar/My_Bot_Hunter.git  
  - cd My_Bot_Hunter  
- - npm install  
+ - npm install
+
+**Before running the test**
+ - Create and .env file and store your EMAIL_USER = '', EMAIL_PASS = '' (create an app password from Google security settings to use instead of your personal email password), LINKEDIN_PASS = ''
 
 **Run the test:**
  - npm run mytest
