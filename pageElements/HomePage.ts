@@ -34,6 +34,7 @@ export class HomePage {
     }
     
     async clickOnJobsTab(): Promise<void> {
+        await this.lnkjobsTab.waitFor({ state: 'visible' });
         await this.lnkjobsTab.click();
     }
 }

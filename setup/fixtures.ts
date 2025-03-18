@@ -8,6 +8,7 @@ type Fixtures = {
     homePage: HomePage;
     loginPage: LoginPage;
     jobsPage: JobsPage;
+    appliedJobs: { count: number }; // Store applied jobs count
 };
 
 export const test = base.extend<Fixtures>({
@@ -41,8 +42,12 @@ export const test = base.extend<Fixtures>({
     loginPage: async ({ page }, use) => {
         await use(new LoginPage(page));
     },
-    jobsPage: async ({ page }, use) => {
-        await use(new JobsPage(page));
+    appliedJobs: async ({}, use) => {
+        let count = 0;
+        await use({ count });
+    },
+    jobsPage: async ({ page, appliedJobs }, use) => { 
+        await use(new JobsPage(page, appliedJobs));
     },
 });
 

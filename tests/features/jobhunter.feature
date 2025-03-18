@@ -7,11 +7,14 @@ Scenario Outline: Apply for QA Automation Jobs
     And LoginPage: Login with valid "<email>" and "<password>"
     Then HomePage: Verify user is logged in
     When HomePage: Click on "Jobs" tab
-    And JobsPage: Search for "<role>"
+    And JobsPage: Search for "<role>" in "<location>"
     And JobsPage: Click on the "Easy Apply" and "Remote" filters
     And JobsPage: Click the "Easy Apply" button on every job listing that matches qa automation role
+    And JobsPage: Go to "My Jobs" page
+    Then JobsPage: I should see the exact number of recently applied jobs in My Jobs page
+    And JobsPage: Send me an email with the title and description of each job I just applied
 
     @mytest
     Examples:
-    | email | password |         role         |
-    |MYEMAIL|MYPASSWORD|qa automation engineer|
+    |  email   |   password  |         role         | location  |
+    |EMAIL_USER|LINKEDIN_PASS|qa automation engineer|Cluj-Napoca|
