@@ -19,7 +19,10 @@ jobs:
           node-version: 20
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci  # Ensures a clean and reliable dependency install
+
+      - name: Verify Installed Packages (Debugging Step)
+        run: npm list --depth=0  # Ensures playwright-bdd is installed
 
       - name: Run Automation Script with Retry
         run: |
@@ -28,10 +31,10 @@ jobs:
           SUCCESS=false
           while [ $COUNT -le $RETRIES ]; do
             echo "Running automation script (Attempt: $((COUNT+1))/$RETRIES)"
-            npm run mytest && SUCCESS=true && break
+            npx bddgen && npm run mytest && SUCCESS=true && break
             COUNT=$((COUNT+1))
             echo "Attempt $COUNT failed, retrying..."
-            sleep 10  # Optional: add a delay between retries
+            sleep 10
           done
           if [ "$SUCCESS" = false ]; then
             echo "Script failed after $RETRIES attempt"
