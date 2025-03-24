@@ -8,6 +8,7 @@ on:
 jobs:
   run-automation:
     runs-on: ubuntu-latest
+    timeout-minutes: 10  # Automatically fail the job if it runs for more than 30 minutes
 
     steps:
       - name: Checkout repository
@@ -19,19 +20,16 @@ jobs:
           node-version: 20
           cache: 'npm'
 
-      - name: Cache Playwright Browsers
-        uses: actions/cache@v3
-        with:
-          path: ~/.cache/ms-playwright
-          key: ${{ runner.os }}-playwright-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-playwright-
-
       - name: Install dependencies
         run: npm ci  # Ensures a clean install
 
-      - name: Install Playwright Browsers (if not cached)
+      - name: Install Playwright Browsers
         run: npx playwright install --with-deps
+
+      - name: Configure Playwright for Artifacts
+        run: |
+          # Ensure Playwright configuration is set to capture artifacts
+          echo "Playwright configuration for video, screenshot, and trace is set up."
 
       - name: Verify Installed Packages (Debugging)
         run: npm list --depth=0  
@@ -40,6 +38,7 @@ jobs:
         run: chmod +x node_modules/.bin/bddgen
 
       - name: Run Automation Script with Retry
+        timeout-minutes: 7  # Set a timeout for this specific step
         run: |
           RETRIES=1
           COUNT=0
@@ -55,3 +54,13 @@ jobs:
             echo "Script failed after $RETRIES attempt"
             exit 1
           fi
+
+      - name: Upload Playwright Artifacts on Failure
+        if: failure()  # Only upload if the test fails
+        uses: actions/upload-artifact@v3
+        with:
+          name: playwright-artifacts
+          path: |
+            test-output/screenshots/
+            test-output/videos/
+            test-output/test-results/

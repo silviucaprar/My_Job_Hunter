@@ -29,19 +29,23 @@ export default defineConfig({
   /* Opt out of parallel tests on CI. */
   workers: process.env.CI ? 1 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: 'html',
+  reporter: [
+    ['json', { outputFile: 'test-results/results.json' }],  // Save test results in a JSON file
+    ['html', { open: 'never' }]  // Generate an HTML report (optional)
+  ],
+  outputDir: './test-output',  // Output directory for all the Playwright artifacts
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   // globalSetup: require.resolve('./setup/auth.setup.ts'),
   use: {
     headless: true,
     /* Base URL to use in actions like `await page.goto('/')`. */
     baseURL: 'https://linkedin.com',
-
+    video: 'on-first-retry',  // Record video only on the first retry
+    screenshot: 'on-first-failure',  // Take screenshot only on failure
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
     
   },
-
   /* Configure projects for major browsers */
   projects: [
     {
