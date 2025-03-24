@@ -57,7 +57,7 @@ jobs:
 
       - name: Upload Playwright Artifacts on Failure
         if: failure()  # Only upload if the test fails
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v2
         with:
           name: playwright-artifacts
           path: |
