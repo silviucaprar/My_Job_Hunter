@@ -17,12 +17,16 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: 'npm'  # Cache dependencies for faster installs
 
       - name: Install dependencies
-        run: npm ci  # Ensures a clean and reliable dependency install
+        run: npm ci  # Ensures a clean install using package-lock.json
 
-      - name: Verify Installed Packages (Debugging Step)
-        run: npm list --depth=0  # Ensures playwright-bdd is installed
+      - name: Verify Installed Packages
+        run: npm list --depth=0  # Debugging step to confirm installed dependencies
+
+      - name: Ensure bddgen is executable
+        run: chmod +x node_modules/.bin/bddgen
 
       - name: Run Automation Script with Retry
         run: |
