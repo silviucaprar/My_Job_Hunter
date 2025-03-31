@@ -27,7 +27,7 @@ export class LoginPage {
     }
 
     async clickOnSignInButton(): Promise<void> {
-        await this.btnLoginSignin.click();
+        await this.btnLoginSignin.click({timeout: 40000});
     }
 
     async login(email: string, password: string): Promise<void> {
