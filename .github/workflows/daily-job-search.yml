@@ -1,14 +1,14 @@
-name: Daily Automation Job Search
+name: Daily Job Search Automation
 
 on:
   schedule:
-    - cron: "0 9 * * *"  # Runs at 9 AM UTC, which is 11 AM GMT+2
+    - cron: "0 9 * * *"  # Runs at 9 AM UTC (11 AM GMT+2)
   workflow_dispatch:  # Allows manual triggering
 
 jobs:
-  run-automation:
+  job-search:
     runs-on: ubuntu-latest
-    timeout-minutes: 10  # Automatically fail the job if it runs for more than 10 minutes
+    timeout-minutes: 10  # Job fails if it runs longer than 10 minutes
 
     steps:
       - name: Checkout repository
@@ -21,45 +21,23 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm ci  # Ensures a clean install
+        run: npm ci
 
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
 
-      - name: Configure Playwright for Artifacts
-        run: |
-          echo "Playwright configuration for video, screenshot, and trace is set up."
+      - name: Run Job Search Script with Retry
+        id: run-tests
+        continue-on-error: true  # Allow retry if the first attempt fails
+        run: npm run mytest
 
-      - name: Verify Installed Packages (Debugging)
-        run: npm list --depth=0  
-
-      - name: Ensure bddgen is executable
-        run: chmod +x node_modules/.bin/bddgen
-
-      - name: Run Automation Script with Retry
-        timeout-minutes: 7  # Set a timeout for this specific step
-        run: |
-          RETRIES=1
-          COUNT=0
-          SUCCESS=false
-          while [ $COUNT -le $RETRIES ]; do
-            echo "Running automation script (Attempt: $((COUNT+1))/$RETRIES)"
-            npx bddgen && npm run mytest && SUCCESS=true && break
-            COUNT=$((COUNT+1))
-            echo "Attempt $COUNT failed, retrying..."
-            sleep 10
-          done
-          if [ "$SUCCESS" = false ]; then
-            echo "Script failed after $RETRIES attempt"
-            exit 1
-          fi
+      - name: Retry Job Search Script (if first attempt failed)
+        if: steps.run-tests.outcome == 'failure'
+        run: npm run mytest
 
       - name: Upload Playwright Artifacts on Failure
-        if: failure()  # Only upload if the test fails
+        if: failure()
         uses: actions/upload-artifact@v4
         with:
           name: playwright-artifacts
-          path: |
-            test-output/screenshots/
-            test-output/videos/
-            test-output/test-results/
+          path: test-output/
