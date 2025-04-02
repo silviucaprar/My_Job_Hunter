@@ -18,7 +18,7 @@ export default defineConfig({
   testDir: defineBddConfig({
     features: ['tests/features/*.feature'],
     steps: ['tests/steps/*.ts', 'setup/*.ts'],
-    tags: "@mytest",
+    tags: "@savesession or @mytest",
   }),
   /* Run tests in files in parallel */
   fullyParallel: true,
@@ -35,16 +35,15 @@ export default defineConfig({
   ],
   outputDir: './test-output',  // Output directory for all the Playwright artifacts
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
-  // globalSetup: require.resolve('./setup/auth.setup.ts'),
   use: {
-    headless: true,
+    headless: false,
     /* Base URL to use in actions like `await page.goto('/')`. */
     baseURL: 'https://linkedin.com',
     video: 'on-first-retry',  // Record video only on the first retry
     screenshot: 'on-first-failure',  // Take screenshot only on failure
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
-    
+    storageState: "storageState.json",
   },
   /* Configure projects for major browsers */
   projects: [

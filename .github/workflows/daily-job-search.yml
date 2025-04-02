@@ -41,3 +41,14 @@ jobs:
         with:
           name: playwright-artifacts
           path: test-output/
+
+      - name: Set Storage State from Secrets
+        if: success()
+        run: echo "${{ secrets.STORAGE_STATE }}" > storageState.json
+
+      - name: Upload Storage State file on failure (if exists)
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: storageState
+          path: storageState.json

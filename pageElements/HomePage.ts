@@ -7,6 +7,7 @@ export class HomePage {
     readonly btnRejectCookies: Locator;
     readonly lnkjobsTab: Locator;
     readonly userName: Locator;
+    readonly homeActiveLocator: Locator;
      
     constructor(page: Page) {
         this.page = page;
@@ -14,6 +15,7 @@ export class HomePage {
         this.btnRejectCookies = page.getByRole('button', {name: 'Reject'});
         this.lnkjobsTab = page.getByRole('link', {name: 'Jobs', exact: true});
         this.userName = page.locator('.t-16.t-black.t-bold').nth(0);
+        this.homeActiveLocator = this.page.locator('[type="home-active"]');
     }
 
     async openHomepage(): Promise<void> {
@@ -29,8 +31,13 @@ export class HomePage {
     }
     
     async userIsLoggedIn(): Promise<string> {
-        await this.page.waitForURL(/linkedin\.com\/feed/);
-        return this.page.url();
+        try {
+            await this.homeActiveLocator.waitFor({ state: 'visible', timeout: 10000 });
+            return this.page.url();
+        } catch (error) {
+            console.error("User is not logged in or page did not load properly:", error);
+            throw error;
+        }
     }
     
     async clickOnJobsTab(): Promise<void> {

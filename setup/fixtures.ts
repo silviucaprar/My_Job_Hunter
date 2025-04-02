@@ -1,13 +1,13 @@
 import { test as base } from 'playwright-bdd';
 import { createBdd } from 'playwright-bdd';
 import { HomePage } from '../pageElements/HomePage';
-import { LoginPage } from '../pageElements/LoginPage';
 import { JobsPage } from '../pageElements/JobsPage';
+import { LinkedInStoragePage } from '../pageElements/LinkedInStoragePage';
 
 type Fixtures = {
     homePage: HomePage;
-    loginPage: LoginPage;
     jobsPage: JobsPage;
+    linkedinstoragePage: LinkedInStoragePage;
     appliedJobs: { count: number }; // Store applied jobs count
 };
 
@@ -39,9 +39,6 @@ export const test = base.extend<Fixtures>({
     homePage: async ({ page }, use) => {
         await use(new HomePage(page));
     },
-    loginPage: async ({ page }, use) => {
-        await use(new LoginPage(page));
-    },
     appliedJobs: async ({}, use) => {
         let count = 0;
         await use({ count });
@@ -49,6 +46,10 @@ export const test = base.extend<Fixtures>({
     jobsPage: async ({ page, appliedJobs }, use) => { 
         await use(new JobsPage(page, appliedJobs));
     },
+
+    linkedinstoragePage: async ({ page }, use) => {
+        await use(new LinkedInStoragePage(page));
+    }
 });
 
 export const { Given, When, Then } = createBdd(test);
