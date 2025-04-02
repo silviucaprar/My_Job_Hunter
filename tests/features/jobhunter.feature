@@ -10,10 +10,6 @@ Scenario: Save LinkedIn session
 
 Scenario Outline: Apply for QA Automation Jobs
     Given HomePage: Navigate to LinkedIn website
-    # When HomePage: Click on "Reject" cookies button
-    # And HomePage: Click on "Sign in" button to enter Loginpage
-    # And LoginPage: Login with valid "<email>" and "<password>"
-    # And LinkedInStoragePage: Load saved session
     Then HomePage: Verify user is logged in
     When HomePage: Click on "Jobs" tab
     And JobsPage: Search for "<role>" in "<location>"
@@ -25,5 +21,5 @@ Scenario Outline: Apply for QA Automation Jobs
 
     @mytest
     Examples:
-    |  email   |   password  |         role         | location  |
-    |EMAIL_USER|LINKEDIN_PASS|qa automation engineer|Cluj-Napoca|
+    |         role         | location  |
+    |qa automation engineer|Cluj-Napoca|

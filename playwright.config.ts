@@ -36,7 +36,7 @@ export default defineConfig({
   outputDir: './test-output',  // Output directory for all the Playwright artifacts
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
-    headless: false,
+    headless: true,
     /* Base URL to use in actions like `await page.goto('/')`. */
     baseURL: 'https://linkedin.com',
     video: 'on-first-retry',  // Record video only on the first retry

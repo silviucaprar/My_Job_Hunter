@@ -26,6 +26,9 @@ jobs:
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
 
+      - name: Create storageState.json from secret
+        run: echo "${{ secrets.STORAGE_STATE }}" > storageState.json
+
       - name: Run Job Search Script with Retry
         id: run-tests
         continue-on-error: true  # Allow retry if the first attempt fails
@@ -41,14 +44,3 @@ jobs:
         with:
           name: playwright-artifacts
           path: test-output/
-
-      - name: Set Storage State from Secrets
-        if: success()
-        run: echo "${{ secrets.STORAGE_STATE }}" > storageState.json
-
-      - name: Upload Storage State file on failure (if exists)
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: storageState
-          path: storageState.json
