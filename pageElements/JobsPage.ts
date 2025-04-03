@@ -1,6 +1,5 @@
 import { Page, Locator, expect } from '@playwright/test';
 import dotenv from 'dotenv';
-// import nodemailer from 'nodemailer';
 
 dotenv.config();
 
@@ -69,13 +68,10 @@ export class JobsPage {
     async clickOnRemoteFilter(): Promise<void> {
         await this.applyRemoteFilter.waitFor({ state: 'visible', timeout: 10000});
         await this.applyRemoteFilter.click({ force: true, timeout: 10000});
-        // await this.page.waitForTimeout(1000);
         await this.cbRemoteOption.waitFor({ state: 'visible', timeout: 5000 });
         await this.cbRemoteOption.click({timeout: 10000});
-        // await this.page.waitForTimeout(1000);
         await this.cbHybridOption.waitFor({ state: 'visible', timeout: 5000 })
         await this.cbHybridOption.click({timeout: 10000});
-        // await this.page.waitForTimeout(1000);
         await this.btnShowResults.waitFor({ state: 'visible', timeout: 5000 });
         await this.btnShowResults.click({timeout: 10000});
     }
@@ -121,7 +117,7 @@ export class JobsPage {
                 console.log(`Found matching job: ${jobTitle}`);
     
                 await job.click();
-                await this.page.waitForTimeout(1000); // Allow UI to load
+                await this.page.waitForTimeout(1000);
     
                 if (await this.btnEasyApply.isVisible()) {
                     await this.btnEasyApply.click();
@@ -144,7 +140,6 @@ export class JobsPage {
     
             jobIndex++;
     
-            // If all jobs checked, try loading more
             if (jobIndex >= jobCount) {
                 console.log("Checked all jobs on the page. Scrolling down...");
                 
@@ -152,12 +147,11 @@ export class JobsPage {
                     window.scrollBy(0, window.innerHeight);
                 });
     
-                await this.page.waitForTimeout(3000); // Allow jobs to load
+                await this.page.waitForTimeout(3000);
     
                 let newJobCount = await this.jobListings.count();
                 let retryCount = 0;
     
-                // Wait until new jobs are detected (to avoid skipping)
                 while (newJobCount === jobCount && retryCount < 5) {
                     console.log("Waiting for new jobs to load...");
                     await this.page.waitForTimeout(2000);
@@ -168,14 +162,12 @@ export class JobsPage {
                 if (newJobCount > jobCount) {
                     console.log(`Loaded ${newJobCount - jobCount} new jobs.`);
                 } else {
-                    console.log("No more jobs loaded, might be the last page.");
-                    break; // Exit loop if no new jobs appear
+                    break; 
                 }
     
-                jobCount = newJobCount; // Update job count after scroll
+                jobCount = newJobCount;
             }
         }
-    
         console.log(`Finished applying. Total jobs applied: ${this.appliedJobs.count}`);
     }
     
@@ -187,20 +179,16 @@ export class JobsPage {
     }
 
     async checkAppliedJobsCount(): Promise<void> {
-    // Locate all job cards in the "Applied Jobs" section
-    const jobCards = await this.page.getByRole('listitem'); // ✅ Get all job listings
+        const jobCards = await this.page.getByRole('listitem');
 
-    // Count how many job cards contain the text "Applied Now"
-    let appliedNowCount = 0;
-    for (const job of await jobCards.all()) {
-        if (await job.getByText("Applied Now").isVisible()) {
-            appliedNowCount++;
+        let appliedNowCount = 0;
+        for (const job of await jobCards.all()) {
+            if (await job.getByText("Applied Now").isVisible()) {
+                appliedNowCount++;
+            }
         }
-    }
-
-    console.log(`Applied now count: ${appliedNowCount}, Expected: ${this.appliedJobs.count}`);
-
-    expect(appliedNowCount).toBe(this.appliedJobs.count);
+        console.log(`Applied now count: ${appliedNowCount}, Expected: ${this.appliedJobs.count}`);
+        expect(appliedNowCount).toBe(this.appliedJobs.count);
     };
 
     async sendAppliedJobsEmail(): Promise<void> {
@@ -220,42 +208,37 @@ export class JobsPage {
             });
           }
         }
-    
         await this.sendEmail(appliedJobsDetails);
     }
     
     private async sendEmail(appliedJobsDetails: { title: string; link: string }[]): Promise<void> {
         const nodemailer = require('nodemailer');
         const transporter = nodemailer.createTransport({
-          service: 'gmail',
-          auth: {
-            user: process.env.EMAIL_USER,
-            pass: process.env.EMAIL_PASS,
-          },
+            service: 'gmail',
+            auth: {
+                user: process.env.EMAIL_USER,
+                pass: process.env.EMAIL_PASS,
+            },
         });
     
-        const emailContent = appliedJobsDetails
-          .map(
-            (job) => `
-            <h3>${job.title}</h3>
-            <p><a href="${job.link}">${job.link}</a></p>
-            <hr/>
-          `
-          )
-          .join('');
+        const emailContent = appliedJobsDetails.length === 0
+            ? "<p>No jobs available to apply for.</p>"
+            : appliedJobsDetails
+                .map(job => `<h3>${job.title}</h3><p><a href="${job.link}">${job.link}</a></p><hr/>`)
+                .join('');
     
         const mailOptions = {
-          from: process.env.EMAIL_USER,
-          to: process.env.EMAIL_USER,
-          subject: 'Applied Jobs Details',
-          html: emailContent,
+            from: process.env.EMAIL_USER,
+            to: process.env.EMAIL_USER,
+            subject: 'Applied Jobs Details',
+            html: emailContent,
         };
     
         try {
-          await transporter.sendMail(mailOptions);
-          console.log('Applied jobs details email sent successfully.');
+            await transporter.sendMail(mailOptions);
+            console.log('Applied jobs details email sent successfully.');
         } catch (error) {
-          console.error('Error sending applied jobs details email:', error);
+            console.error('Error sending applied jobs details email:', error);
         }
     }
 }
