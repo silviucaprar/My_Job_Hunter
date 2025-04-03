@@ -8,6 +8,9 @@ on:
 jobs:
   job-search:
     runs-on: ubuntu-latest
+    env:
+      EMAIL_USER: ${{ secrets.EMAIL_USER }}
+      EMAIL_PASS: ${{ secrets.EMAIL_PASS }}
     timeout-minutes: 15  # Job fails if it runs longer than 10 minutes
 
     steps:
