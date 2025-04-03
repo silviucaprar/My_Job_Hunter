@@ -67,7 +67,7 @@ export class JobsPage {
     }
 
     async clickOnRemoteFilter(): Promise<void> {
-        await this.applyRemoteFilter.waitFor({ state: 'visible'});
+        await this.applyRemoteFilter.waitFor({ state: 'visible', timeout: 10000});
         await this.applyRemoteFilter.click({timeout: 10000});
         await this.page.waitForTimeout(1000);
         await this.cbRemoteOption.click({timeout: 10000});
