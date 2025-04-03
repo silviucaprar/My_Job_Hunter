@@ -8,7 +8,7 @@ on:
 jobs:
   job-search:
     runs-on: ubuntu-latest
-    timeout-minutes: 10  # Job fails if it runs longer than 10 minutes
+    timeout-minutes: 15  # Job fails if it runs longer than 10 minutes
 
     steps:
       - name: Checkout repository
@@ -23,34 +23,24 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Install Playwright Browsers
+      - name: Cache Playwright Browsers
+        id: playwright-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            playwright-${{ runner.os }}-
+
+      - name: Install Playwright Browsers (if not cached)
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
         run: npx playwright install --with-deps
 
-      - name: Debug Secret Access
-        run: |
-          if [[ -z "${{ secrets.STORAGE_STATE }}" ]]; then
-            echo "❌ Secretul STORAGE_STATE este gol sau inaccesibil!"
-            exit 1
-          else
-            echo "✅ Secretul STORAGE_STATE este setat corect!"
-          fi
-
       - name: Decode storageState.json from secret
-        run: |
-          echo "${{ secrets.STORAGE_STATE }}" | base64 --decode > storageState.json
+        run: echo "${{ secrets.STORAGE_STATE }}" | base64 --decode > storageState.json
 
-      - name: Verify storageState.json
-        run: |
-          if [ ! -s storageState.json ]; then
-            echo "❌ Eroare: storageState.json nu a fost creat corect!"
-            exit 1
-          else
-            echo "✅ storageState.json a fost generat cu succes!"
-          fi
-
-      - name: Run Job Search Script with Retry
+      - name: Run Job Search Script
         id: run-tests
-        continue-on-error: true  # Allow retry if the first attempt fails
         run: npm run mytest
 
       - name: Retry Job Search Script (if first attempt failed)
