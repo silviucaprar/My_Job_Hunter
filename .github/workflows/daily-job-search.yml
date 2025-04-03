@@ -26,8 +26,27 @@ jobs:
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
 
-      - name: Create storageState.json from secret
-        run: echo "${{ secrets.STORAGE_STATE }}" > storageState.json
+      - name: Debug Secret Access
+        run: |
+          if [[ -z "${{ secrets.STORAGE_STATE }}" ]]; then
+            echo "❌ Secretul STORAGE_STATE este gol sau inaccesibil!"
+            exit 1
+          else
+            echo "✅ Secretul STORAGE_STATE este setat corect!"
+          fi
+
+      - name: Decode storageState.json from secret
+        run: |
+          echo "${{ secrets.STORAGE_STATE }}" | base64 --decode > storageState.json
+
+      - name: Verify storageState.json
+        run: |
+          if [ ! -s storageState.json ]; then
+            echo "❌ Eroare: storageState.json nu a fost creat corect!"
+            exit 1
+          else
+            echo "✅ storageState.json a fost generat cu succes!"
+          fi
 
       - name: Run Job Search Script with Retry
         id: run-tests
