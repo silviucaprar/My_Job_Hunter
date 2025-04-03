@@ -62,22 +62,22 @@ export class JobsPage {
     }
 
     async clickOnEasyApplyFilter(): Promise<void> {
-        await this.applyEasyApplyFilter.click();
+        await this.applyEasyApplyFilter.click({timeout: 10000});
         await this.page.waitForTimeout(1000);
     }
 
     async clickOnRemoteFilter(): Promise<void> {
-        await this.applyRemoteFilter.click();
+        await this.applyRemoteFilter.click({timeout: 10000});
         await this.page.waitForTimeout(1000);
-        await this.cbRemoteOption.click();
+        await this.cbRemoteOption.click({timeout: 10000});
         await this.page.waitForTimeout(1000);
-        await this.cbHybridOption.click();
+        await this.cbHybridOption.click({timeout: 10000});
         await this.page.waitForTimeout(1000);
-        await this.btnShowResults.click();
+        await this.btnShowResults.click({timeout: 10000});
     }
 
     async clickOnEasyApplyButton(): Promise<void> {
-        await this.btnEasyApply.click();
+        await this.btnEasyApply.click({timeout: 10000});
     }
 
     async abortApplication(): Promise<void> {  
