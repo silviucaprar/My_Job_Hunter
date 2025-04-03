@@ -21,4 +21,5 @@ Then('HomePage: Verify user is logged in', async ({ homePage }) => {
 
 When('HomePage: Click on "Jobs" tab', async ({ homePage }) => {
     await homePage.clickOnJobsTab();
+    console.log('Jobs page reached.')
 })

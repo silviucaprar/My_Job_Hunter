@@ -3,6 +3,7 @@ import { When, Then } from "../../setup/fixtures"
 When('JobsPage: Search for {string} in {string}', async ({ jobsPage }, role: string, location: string) => {
     await jobsPage.fillRoleSearchbox(role);
     await jobsPage.fillLocationSearchbox(location);
+    console.log('Role and location were filled')
 });
 
 When('JobsPage: Click on the "Easy Apply" and "Remote" filters', async ({ jobsPage }) => {
