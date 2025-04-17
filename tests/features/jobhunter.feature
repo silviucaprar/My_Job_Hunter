@@ -5,7 +5,7 @@ Scenario: Save LinkedIn session
     Given HomePage: Navigate to LinkedIn website
     When HomePage: Click on "Reject" cookies button
     And HomePage: Click on "Sign in" button to enter Loginpage
-    And LinkedInStoragePage: Save session
+    And LoginPage: Save session
     Then HomePage: Verify user is logged in
 
 Scenario Outline: Apply for QA Automation Jobs

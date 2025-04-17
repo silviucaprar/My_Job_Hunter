@@ -1,7 +1,7 @@
 import { Page, Locator } from "@playwright/test";
 import path from "path";
 
-export class LinkedInStoragePage {
+export class LoginPage {
     private page: Page;
     private homeActiveLocator: Locator;
     private storagePath: string;
@@ -28,13 +28,4 @@ export class LinkedInStoragePage {
 
         await this.page.context().storageState({ path: this.storagePath });
     }
-
-    // async loadSession(): Promise<void> {
-    //     try {
-    //         await this.page.context().setStorageState({ path: this.storagePath });
-    //         await this.page.goto("https://www.linkedin.com/feed");
-    //     } catch (error) {
-    //         console.error("⚠ Session loading error", error);
-    //     }
-    // }
 }
